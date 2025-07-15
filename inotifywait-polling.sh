@@ -147,13 +147,13 @@ watch () {
     [[ "${watchtower}" != */ ]] && watchtower="${watchtower}/"
     watchtower="${watchtower}.$(echo $target | sed -e 's|\.||g' -e 's|^./||g; s|^/||g' -e 's|/$||g' | sed -e 's|/|-|g')${WATCHTOWER_SUFFIX}"
 
-    find $target -printf "${DIFF_FORMAT[0]}\\n" > "${watchtower}"
+    find $target -printf "${DIFF_FORMAT[0]}\\n" 2>/dev/null > "${watchtower}"
     while true; do
         sleep "${interval}"
         init
 
         last=$(cat "${watchtower}")
-        find $target -printf "${DIFF_FORMAT[0]}\\n" > "${watchtower}"
+        find $target -printf "${DIFF_FORMAT[0]}\\n" 2>/dev/null > "${watchtower}"
 
         meta=$(diff <(echo "${last}") <(cat "${watchtower}")) && true
         [[ -z "${meta}" ]] && continue
